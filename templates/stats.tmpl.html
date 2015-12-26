@@ -1,0 +1,14 @@
+{{ define "content" }}
+  <ul class="list-group">
+    {{range .}}
+    <li class="list-group-item">
+      {{.Language}} <span class="badge">{{.Count}}</span>
+      <p></p>
+
+      <div class="progress">
+        <div class="progress-bar progress-bar-info" style="width: {{.Percent}}%;"></div>
+      </div>
+    </li>
+    {{end}}
+  </ul>
+{{ end }}
