@@ -49,7 +49,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-const DefaultLimit = 100
+const DefaultLimit = 50
 
 func parseLimit(r *http.Request) int {
 	l := r.URL.Query().Get("limit")
