@@ -8,8 +8,8 @@ import (
 	"strconv"
 	"sync"
 
+	"github.com/f2prateek/go-instapaper"
 	"github.com/f2prateek/hn2instapaper/hn"
-	"github.com/f2prateek/hn2instapaper/instapaper"
 	"github.com/f2prateek/semaphore"
 	"github.com/gohttp/response"
 	"github.com/tj/docopt"
@@ -50,7 +50,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 	err := homeTemplate.ExecuteTemplate(w, "base", Page{"Home"})
 	if err != nil {
 		log.Println("error rendering template", err)
-		response.Error(w, http.StatusInternalServerError)
+		response.InternalServerError(w)
 	}
 }
 
@@ -58,7 +58,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	err := loginTemplate.ExecuteTemplate(w, "base", Page{"Login"})
 	if err != nil {
 		log.Println("error rendering template", err)
-		response.Error(w, http.StatusInternalServerError)
+		response.InternalServerError(w)
 	}
 }
 

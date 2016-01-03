@@ -1,10 +1,39 @@
 {{ define "content" }}
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/1.2.0/superagent.js"></script>
+
+  <script>
+  $(document).ready(function() {
+    $("#loading").hide();
+    $("#login").click(function() {
+      $("#login").hide();
+      $("#loading").show();
+
+      var username = $('#inputEmail').val();
+      var password = $('#inputPassword').val();
+
+      window.superagent
+        .post('/import')
+        .auth(username, password)
+        .end(function(err, res){
+          console.log(res);
+          console.log('res.ok:', res.ok);
+          console.log('res.ok:', res.text);
+
+          $("#login").show();
+          $("#loading").hide();
+        });
+    });
+  });
+  </script>
+
   <div class="row" style="text-align:center;">
     <div class="col-md-6" style="display:inline-block;float:none;margin-right:-4px;">
       <input type="text" class="form-control" id="inputEmail" placeholder="Email" autocomplete="off">
       <input type="password" class="form-control" id="inputPassword" placeholder="Password" autocomplete="off">
       <p/><p/>
-      <a href="/import" class="btn btn-success" role="button"><i class="fa fa-sign-in"></i> Import</a>
+      <div id="login" class="btn btn-primary" role="button"><i class="fa fa-sign-in"></i> Login to Instapaper</div>
+      <div id="loading" class="btn btn-warning" role="button"><i class="fa fa-circle-o-notch fa-spin"></i> Importing articles</div>
     </div>
   </div>
 {{ end }}
