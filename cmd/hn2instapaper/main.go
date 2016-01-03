@@ -8,11 +8,11 @@ import (
 	"strconv"
 	"sync"
 
-	"github.com/f2prateek/go-instapaper"
-	"github.com/f2prateek/hn2instapaper/hn"
-	"github.com/f2prateek/semaphore"
-	"github.com/gohttp/response"
-	"github.com/tj/docopt"
+	"github.com/f2prateek/hn2instapaper-server/Godeps/_workspace/src/github.com/f2prateek/go-instapaper"
+	"github.com/f2prateek/hn2instapaper-server/Godeps/_workspace/src/github.com/f2prateek/hn2instapaper/hn"
+	"github.com/f2prateek/hn2instapaper-server/Godeps/_workspace/src/github.com/f2prateek/semaphore"
+	"github.com/f2prateek/hn2instapaper-server/Godeps/_workspace/src/github.com/gohttp/response"
+	"github.com/f2prateek/hn2instapaper-server/Godeps/_workspace/src/github.com/tj/docopt"
 )
 
 const (

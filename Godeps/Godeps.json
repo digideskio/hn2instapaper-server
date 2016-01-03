@@ -1,0 +1,35 @@
+{
+	"ImportPath": "github.com/f2prateek/hn2instapaper-server",
+	"GoVersion": "go1.5.2",
+	"Packages": [
+		"./..."
+	],
+	"Deps": [
+		{
+			"ImportPath": "github.com/f2prateek/go-instapaper",
+			"Rev": "32c02e37f214ddf75cf30af1f2442095d4d319ce"
+		},
+		{
+			"ImportPath": "github.com/f2prateek/hn2instapaper/hn",
+			"Rev": "1bf8c6fb3b9e55df3b66c956f71c700a978e7af5"
+		},
+		{
+			"ImportPath": "github.com/f2prateek/semaphore",
+			"Rev": "f519b9301f4a77836c44107c4face4f6ae9c528c"
+		},
+		{
+			"ImportPath": "github.com/gohttp/response",
+			"Comment": "v1.2.0",
+			"Rev": "7dbb789231fb9752c748babb9c9bd82f4c7014be"
+		},
+		{
+			"ImportPath": "github.com/segmentio/url-encoder",
+			"Rev": "43e8666d9532ef2d2e6b57d8de419d3691b2413f"
+		},
+		{
+			"ImportPath": "github.com/tj/docopt",
+			"Comment": "v1.0.0",
+			"Rev": "c8470e45692f168e8b380c5d625327e756d7d0a9"
+		}
+	]
+}
