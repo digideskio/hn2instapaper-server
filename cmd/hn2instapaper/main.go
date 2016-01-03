@@ -151,6 +151,28 @@ func importStories(w http.ResponseWriter, r *http.Request) {
 	response.JSON(w, addedStories)
 }
 
+func auth(w http.ResponseWriter, r *http.Request) {
+	username, password, ok := r.BasicAuth()
+	if !ok {
+		response.Forbidden(w)
+		return
+	}
+
+	instapaperClient := instapaper.New(username, password)
+	ok, err := instapaperClient.Authenticate()
+	if err != nil {
+		response.InternalServerError(w)
+		return
+	}
+
+	if ok {
+		response.OK(w)
+		return
+	}
+
+	response.Forbidden(w)
+}
+
 func main() {
 	args, err := docopt.Parse(usage, nil, true, version, false)
 	if err != nil {
@@ -169,6 +191,7 @@ func main() {
 	http.HandleFunc("/", home)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/import", importStories)
+	http.HandleFunc("/auth", auth)
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	log.Println("starting hn2instapaper server on", addr)

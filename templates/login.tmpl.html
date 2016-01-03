@@ -20,16 +20,27 @@
       var password = $('#inputPassword').val();
 
       window.superagent
-        .post('/import')
+        .get('/auth')
         .auth(username, password)
         .end(function(err, res){
           if (err || res.code == 200) {
             $("#error").show();
+            $("#login").show();
+            $("#importing").hide();
           } else {
-            $("#success").show();
+            window.superagent
+              .post('/import')
+              .auth(username, password)
+              .end(function(err, res){
+                if (err || res.code != 200) {
+                  $("#error").show();
+                } else {
+                  $("#success").show();
+                }
+                $("#login").show();
+                $("#importing").hide();
+              });
           }
-          $("#login").show();
-          $("#importing").hide();
         });
     });
   });
@@ -55,7 +66,7 @@
           <button type="button" class="close" data-dismiss="alert">x</button>
           <strong>Well done!</strong> We've imported the top HN articles. <a href="https://www.instapaper.com/u" class="alert-link">Happy Reading</a>!
         </div>
-      </div>      
+      </div>
     </div>
   </div>
 {{ end }}
