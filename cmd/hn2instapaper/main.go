@@ -1,12 +1,12 @@
 package main
 
 import (
+	"html/template"
 	"log"
 	"net/http"
 	"os"
 	"strconv"
 	"sync"
-	"text/template"
 
 	"github.com/f2prateek/hn2instapaper/hn"
 	"github.com/f2prateek/hn2instapaper/instapaper"
