@@ -81,7 +81,7 @@ func parseLimit(r *http.Request) int {
 
 func importStories(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "POST" {
-		log.Println("MethodNotAllowed for /import:", r.Method)
+		log.Printf("%v method not allowed for /import", r.Method)
 		response.MethodNotAllowed(w)
 		return
 	}
@@ -92,7 +92,7 @@ func importStories(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	limit := parseLimit(r)
-	log.Println("import", limit, "stories for", username)
+	log.Printf("importing %v stories for %v", limit, username)
 
 	hnClient := hn.New()
 	stories, err := hnClient.TopStories()
@@ -124,7 +124,7 @@ func importStories(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 			if story.URL == nil {
-				log.Println("skipping", id, ":", story.Title)
+				log.Printf("skipping story %v with title %v", id, story.Title)
 				return
 			}
 
@@ -134,7 +134,7 @@ func importStories(w http.ResponseWriter, r *http.Request) {
 			})
 			if err != nil {
 				errs = append(errs, err)
-				log.Println("error adding", story)
+				log.Println("error adding", story, err)
 				return
 			}
 			addedStories = append(addedStories, story)
@@ -147,7 +147,7 @@ func importStories(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("imported", len(addedStories), "stories for", username)
+	log.Printf("imported %v stories for %v", len(addedStories), username)
 	response.JSON(w, addedStories)
 }
 
