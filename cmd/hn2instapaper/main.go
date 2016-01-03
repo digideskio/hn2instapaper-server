@@ -30,7 +30,7 @@ Options:
 	version = "0.1.0"
 )
 
-var indexTemplate = loadTemplate("index")
+var homeTemplate = loadTemplate("home")
 var loginTemplate = loadTemplate("login")
 var statsTemplate = loadTemplate("stats")
 
@@ -46,8 +46,8 @@ func loadTemplate(name string) *template.Template {
 	return template.Must(template.New(name).ParseFiles(b, t))
 }
 
-func index(w http.ResponseWriter, r *http.Request) {
-	err := indexTemplate.ExecuteTemplate(w, "base", Page{"Home"})
+func home(w http.ResponseWriter, r *http.Request) {
+	err := homeTemplate.ExecuteTemplate(w, "base", Page{"Home"})
 	if err != nil {
 		log.Println("error rendering template", err)
 		response.Error(w, http.StatusInternalServerError)
@@ -166,7 +166,7 @@ func main() {
 		}
 	}
 
-	http.HandleFunc("/", index)
+	http.HandleFunc("/", home)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/import", importStories)
 
