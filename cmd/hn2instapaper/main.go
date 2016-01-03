@@ -169,6 +169,7 @@ func main() {
 	http.HandleFunc("/", home)
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/import", importStories)
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("static"))))
 
 	log.Println("starting hn2instapaper server on", addr)
 	if err := http.ListenAndServe(addr, nil); err != nil {
