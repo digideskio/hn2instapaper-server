@@ -31,6 +31,7 @@ Options:
 )
 
 var indexTemplate = loadTemplate("index")
+var loginTemplate = loadTemplate("login")
 var statsTemplate = loadTemplate("stats")
 
 // Return the parsed template file at `templates/{name}.tmpl.html` by composing
@@ -43,6 +44,14 @@ func loadTemplate(name string) *template.Template {
 
 func index(w http.ResponseWriter, r *http.Request) {
 	err := indexTemplate.ExecuteTemplate(w, "base", nil)
+	if err != nil {
+		log.Println("error rendering template", err)
+		response.Error(w, http.StatusInternalServerError)
+	}
+}
+
+func login(w http.ResponseWriter, r *http.Request) {
+	err := loginTemplate.ExecuteTemplate(w, "base", nil)
 	if err != nil {
 		log.Println("error rendering template", err)
 		response.Error(w, http.StatusInternalServerError)
@@ -154,6 +163,7 @@ func main() {
 	}
 
 	http.HandleFunc("/", index)
+	http.HandleFunc("/login", login)
 	http.HandleFunc("/import", importStories)
 
 	log.Println("starting hn2instapaper server on", addr)
