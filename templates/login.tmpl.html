@@ -4,10 +4,17 @@
 
   <script>
   $(document).ready(function() {
-    $("#loading").hide();
+    $("#importing").hide();
+    $("#success").hide();
+    $("#error").hide();
+    $("#login").show();
+
     $("#login").click(function() {
       $("#login").hide();
-      $("#loading").show();
+      $("#success").hide();
+      $("#error").hide();
+
+      $("#importing").show();
 
       var username = $('#inputEmail').val();
       var password = $('#inputPassword').val();
@@ -16,12 +23,13 @@
         .post('/import')
         .auth(username, password)
         .end(function(err, res){
-          console.log(res);
-          console.log('res.ok:', res.ok);
-          console.log('res.ok:', res.text);
-
+          if (err || res.code == 200) {
+            $("#error").show();
+          } else {
+            $("#success").show();
+          }
           $("#login").show();
-          $("#loading").hide();
+          $("#importing").hide();
         });
     });
   });
@@ -32,8 +40,18 @@
       <input type="text" class="form-control" id="inputEmail" placeholder="Email" autocomplete="off">
       <input type="password" class="form-control" id="inputPassword" placeholder="Password" autocomplete="off">
       <p/><p/>
+
       <div id="login" class="btn btn-primary" role="button"><i class="fa fa-sign-in"></i> Login to Instapaper</div>
-      <div id="loading" class="btn btn-warning" role="button"><i class="fa fa-circle-o-notch fa-spin"></i> Importing articles</div>
+      <div id="importing" class="btn btn-warning"><i class="fa fa-circle-o-notch fa-spin"></i> Importing articles</div>
+
+      <div id="error" class="alert alert-dismissible alert-danger">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <strong>Oh snap!</strong> Something went wrong. Change a few things up and try again.
+      </div>
+      <div id="success" class="alert alert-dismissible alert-success">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        <strong>Well done!</strong> We've imported the top HN articles. <a href="https://www.instapaper.com/u" class="alert-link">Happy Reading</a>!
+      </div>
     </div>
   </div>
 {{ end }}
