@@ -34,6 +34,10 @@ var indexTemplate = loadTemplate("index")
 var loginTemplate = loadTemplate("login")
 var statsTemplate = loadTemplate("stats")
 
+type Page struct {
+	Name string
+}
+
 // Return the parsed template file at `templates/{name}.tmpl.html` by composing
 // it with `templates/base.tmpl.html`.
 func loadTemplate(name string) *template.Template {
@@ -43,7 +47,7 @@ func loadTemplate(name string) *template.Template {
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	err := indexTemplate.ExecuteTemplate(w, "base", nil)
+	err := indexTemplate.ExecuteTemplate(w, "base", Page{"Home"})
 	if err != nil {
 		log.Println("error rendering template", err)
 		response.Error(w, http.StatusInternalServerError)
@@ -51,7 +55,7 @@ func index(w http.ResponseWriter, r *http.Request) {
 }
 
 func login(w http.ResponseWriter, r *http.Request) {
-	err := loginTemplate.ExecuteTemplate(w, "base", nil)
+	err := loginTemplate.ExecuteTemplate(w, "base", Page{"Login"})
 	if err != nil {
 		log.Println("error rendering template", err)
 		response.Error(w, http.StatusInternalServerError)
