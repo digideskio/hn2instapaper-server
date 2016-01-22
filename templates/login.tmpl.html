@@ -5,11 +5,13 @@
   <script type="text/babel">
     var Input = ReactBootstrap.Input;
     var Button = ReactBootstrap.Button;
+    var ProgressBar = ReactBootstrap.ProgressBar;
     var Login = React.createClass({
       getInitialState() {
         return {
           emailText: '',
-          passwordText: ''
+          passwordText: '',
+          importing: false
         };
       },
       validationState() {
@@ -27,17 +29,25 @@
         });
       },
       handleClick() {
-        // todo:
+        this.setState({
+          importing: true
+        });
       },
       render: function() {
+        var button;
+        if (this.state.importing) {
+          button = <ProgressBar active now={100}/>
+        } else {
+          button = <Button bsStyle="primary" onClick={this.handleClick}>Import</Button>
+        }
+
         return (
           <div>
             <Input
               type="text"
               value={this.state.emailText}
-              placeholder="Email"
+              placeholder="Instapaper Email"
               label="Email"
-              help="Your Instapaper Account Email Address."
               bsStyle={this.validationState()}
               hasFeedback
               ref="email"
@@ -48,16 +58,15 @@
             <Input
               type="password"
               value={this.state.passwordText}
-              placeholder="Password"
+              placeholder="Instapaper Password"
               label="Pasword"
-              help="Your Instapaper Account Password."
               hasFeedback
               ref="password"
               groupClassName="group-class"
               labelClassName="label-class"
               onChange={this.handleChange} />
 
-            <Button bsStyle="primary" onClick={this.handleClick}>Import</Button>
+            {button}
           </div>
         );
       }
