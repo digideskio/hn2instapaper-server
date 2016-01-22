@@ -4,6 +4,7 @@
 
   <script type="text/babel">
     var Input = ReactBootstrap.Input;
+    var Button = ReactBootstrap.Button;
     var Login = React.createClass({
       getInitialState() {
         return {
@@ -24,6 +25,9 @@
           emailText: this.refs.email.getValue(),
           passwordText: this.refs.password.getValue()
         });
+      },
+      handleClick() {
+        // todo:
       },
       render: function() {
         return (
@@ -52,6 +56,8 @@
               groupClassName="group-class"
               labelClassName="label-class"
               onChange={this.handleChange} />
+
+            <Button bsStyle="primary" onClick={this.handleClick}>Import</Button>
           </div>
         );
       }
