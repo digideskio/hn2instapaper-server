@@ -1,6 +1,6 @@
 default: server
 
 server:
-	@godep run cmd/hn2instapaper/main.go
+	@godep go run cmd/hn2instapaper/main.go
 
 .PHONY: server

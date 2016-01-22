@@ -1,72 +1,63 @@
 {{ define "content" }}
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/1.2.0/superagent.js"></script>
+  <div id="content"></div>
 
-  <script>
-  $(document).ready(function() {
-    $("#importing").hide();
-    $("#success").hide();
-    $("#error").hide();
-    $("#login").show();
-
-    $("#login").click(function() {
-      $("#login").hide();
-      $("#success").hide();
-      $("#error").hide();
-
-      $("#importing").show();
-
-      var username = $('#inputEmail').val();
-      var password = $('#inputPassword').val();
-
-      window.superagent
-        .get('/auth')
-        .auth(username, password)
-        .end(function(err, res){
-          if (err || res.code == 200) {
-            $("#error").show();
-            $("#login").show();
-            $("#importing").hide();
-          } else {
-            window.superagent
-              .post('/import')
-              .auth(username, password)
-              .end(function(err, res){
-                if (err || res.code != 200) {
-                  $("#error").show();
-                } else {
-                  $("#success").show();
-                }
-                $("#login").show();
-                $("#importing").hide();
-              });
-          }
+  <script type="text/babel">
+    var Input = ReactBootstrap.Input;
+    var Login = React.createClass({
+      getInitialState() {
+        return {
+          emailText: '',
+          passwordText: ''
+        };
+      },
+      validationState() {
+        let email = this.state.emailText;
+        if (email.length < 3) return;
+        let re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let match = re.test(email);
+        if (match) return 'success';
+        return 'warning';
+      },
+      handleChange() {
+        this.setState({
+          emailText: this.refs.email.getValue(),
+          passwordText: this.refs.password.getValue()
         });
+      },
+      render: function() {
+        return (
+          <div>
+            <Input
+              type="text"
+              value={this.state.emailText}
+              placeholder="Email"
+              label="Email"
+              help="Your Instapaper Account Email Address."
+              bsStyle={this.validationState()}
+              hasFeedback
+              ref="email"
+              groupClassName="group-class"
+              labelClassName="label-class"
+              onChange={this.handleChange} />
+
+            <Input
+              type="password"
+              value={this.state.passwordText}
+              placeholder="Password"
+              label="Pasword"
+              help="Your Instapaper Account Password."
+              hasFeedback
+              ref="password"
+              groupClassName="group-class"
+              labelClassName="label-class"
+              onChange={this.handleChange} />
+          </div>
+        );
+      }
     });
-  });
+
+    ReactDOM.render(<Login />, document.getElementById('content'));
   </script>
 
-  <div class="row" style="text-align:center;">
-    <div class="col-md-6" style="display:inline-block;float:none;margin-right:-4px;">
-      <input type="text" class="form-control" id="inputEmail" placeholder="Email" autocomplete="off">
-      <input type="password" class="form-control" id="inputPassword" placeholder="Password" autocomplete="off">
-      <p/><p/>
-
-      <div class="container" style="padding:30px;">
-        <div id="login" class="btn btn-primary" role="button"><i class="fa fa-sign-in"></i> Login to Instapaper</div>
-        <div id="importing" class="btn btn-warning"><i class="fa fa-circle-o-notch fa-spin"></i> Importing articles</div>
-      </div>
-
-      <div class="container" style="padding:30px;">
-        <div id="error" class="alert alert-dismissible alert-danger">
-          <button type="button" class="close" data-dismiss="alert">x</button>
-          <strong>Oh snap!</strong> Something went wrong. Change a few things up and try again.
-        </div>
-        <div id="success" class="alert alert-dismissible alert-success">
-          <button type="button" class="close" data-dismiss="alert">x</button>
-          <strong>Well done!</strong> We've imported the top HN articles. <a href="https://www.instapaper.com/u" class="alert-link">Happy Reading</a>!
-        </div>
-      </div>
-    </div>
-  </div>
 {{ end }}
