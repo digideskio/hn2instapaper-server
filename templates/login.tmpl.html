@@ -29,9 +29,41 @@
         });
       },
       handleClick() {
-        this.setState({
-          importing: true
+        var self = this;
+        self.setState({
+          importing: true,
+          message: ""
         });
+        let username = this.state.emailText;
+        let password = this.state.passwordText;
+        window.superagent
+          .get('/auth')
+          .auth(username, password)
+          .end(function(err, res){
+            if (err || res.code != 200) {
+              self.setState({
+                importing: false,
+                message: "Invalid Credentials"
+              });
+            } else {
+              window.superagent
+                .post('/import')
+                .auth(username, password)
+                .end(function(err, res){
+                  if (err || res.code != 200) {
+                    self.setState({
+                      importing: false,
+                      message: "Import Failed"
+                    });
+                  } else {
+                    self.setState({
+                      importing: false,
+                      message: "Import Succeeded!"
+                    });
+                  }
+                });
+            }
+          });
       },
       render: function() {
         var button;
@@ -39,6 +71,11 @@
           button = <ProgressBar active now={100}/>
         } else {
           button = <Button bsStyle="primary" onClick={this.handleClick}>Import</Button>
+        }
+
+        var message;
+        if (this.state.message) {
+          message = this.state.message;
         }
 
         return (
@@ -67,6 +104,8 @@
               onChange={this.handleChange} />
 
             {button}
+
+            {message}
           </div>
         );
       }
