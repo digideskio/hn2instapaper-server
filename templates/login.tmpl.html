@@ -34,35 +34,47 @@
           importing: true,
           message: ""
         });
+
         let username = this.state.emailText;
         let password = this.state.passwordText;
+
         window.superagent
           .get('/auth')
           .auth(username, password)
           .end(function(err, res){
-            if (err || res.code != 200) {
+            if (err) {
+              self.setState({
+                importing: false,
+                message: "Network"
+              });
+              return;
+            }
+
+            if (res.status != 200) {
               self.setState({
                 importing: false,
                 message: "Invalid Credentials"
               });
-            } else {
-              window.superagent
-                .post('/import')
-                .auth(username, password)
-                .end(function(err, res){
-                  if (err || res.code != 200) {
-                    self.setState({
-                      importing: false,
-                      message: "Import Failed"
-                    });
-                  } else {
-                    self.setState({
-                      importing: false,
-                      message: "Import Succeeded!"
-                    });
-                  }
-                });
+              return;
             }
+
+            window.superagent
+              .post('/import')
+              .auth(username, password)
+              .end(function(err, res){
+                if (err || res.status != 200) {
+                  self.setState({
+                    importing: false,
+                    message: "Import Failed"
+                  });
+                } else {
+                  self.setState({
+                    importing: false,
+                    message: "Import Succeeded!"
+                  });
+                }
+              });
+
           });
       },
       render: function() {
