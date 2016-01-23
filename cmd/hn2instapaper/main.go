@@ -62,7 +62,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-const DefaultLimit = 50
+const DefaultLimit = 25
 
 func parseLimit(r *http.Request) int {
 	l := r.URL.Query().Get("limit")
