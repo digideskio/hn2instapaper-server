@@ -3,6 +3,7 @@
   <div id="content"></div>
 
   <script type="text/babel">
+    var Alert = ReactBootstrap.Alert;
     var Input = ReactBootstrap.Input;
     var Button = ReactBootstrap.Button;
     var ProgressBar = ReactBootstrap.ProgressBar;
@@ -11,7 +12,8 @@
         return {
           emailText: '',
           passwordText: '',
-          importing: false
+          importing: false,
+          alert: {}
         };
       },
       validationState() {
@@ -28,11 +30,16 @@
           passwordText: this.refs.password.getValue()
         });
       },
+      handleAlertDismiss() {
+        this.setState({
+          alert: {}
+        });
+      },
       handleClick() {
         var self = this;
         self.setState({
           importing: true,
-          message: ""
+          alert: {}
         });
 
         let username = this.state.emailText;
@@ -45,7 +52,10 @@
             if (err) {
               self.setState({
                 importing: false,
-                message: "Network"
+                alert: {
+                  text: "Network Error",
+                  style: "error",
+                }
               });
               return;
             }
@@ -53,7 +63,10 @@
             if (res.status != 200) {
               self.setState({
                 importing: false,
-                message: "Invalid Credentials"
+                alert: {
+                  text: "Import Failed",
+                  style: "error",
+                }
               });
               return;
             }
@@ -65,30 +78,41 @@
                 if (err || res.status != 200) {
                   self.setState({
                     importing: false,
-                    message: "Import Failed"
+                    alert: {
+                      text: "Import Failed",
+                      style: "error",
+                    }
                   });
-                } else {
-                  self.setState({
-                    importing: false,
-                    message: "Import Succeeded!"
-                  });
+                  return;
                 }
-              });
 
+                self.setState({
+                  importing: false,
+                  alert: {
+                    text: "Import Succeeded!",
+                    style: "success",
+                  }
+                });
+              });
           });
       },
       render: function() {
         var button;
         if (this.state.importing) {
-          button = <ProgressBar active now={100}/>
+          button = <ProgressBar active now={100}/>;
         } else {
-          button = <Button bsStyle="primary" onClick={this.handleClick}>Import</Button>
+          button = <Button bsStyle="primary" onClick={this.handleClick}>Import</Button>;
         }
 
-        var message = this.state.message;
+        var alert;
+        if (this.state.alert.text) {
+          alert = <Alert bsStyle={this.state.alert.syle} onDismiss={this.handleAlertDismiss}>{this.state.alert.text}.</Alert>;
+        }
 
         return (
           <div>
+            {alert}
+
             <Input
               type="text"
               value={this.state.emailText}
@@ -113,8 +137,6 @@
               onChange={this.handleChange} />
 
             {button}
-
-            {message}
           </div>
         );
       }
